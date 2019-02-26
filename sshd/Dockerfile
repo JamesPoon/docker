@@ -1,0 +1,1 @@
+FROM hermsi/alpine-sshd
