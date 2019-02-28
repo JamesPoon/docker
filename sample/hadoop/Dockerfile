@@ -33,7 +33,8 @@ WORKDIR /usr/local/hadoop
 
 # USER hdfs
 
-# ADD .ssh ~/.ssh
+ADD .ssh ${HADOOP_HOME}/.ssh
+RUN chmod 700 ${HADOOP_HOME}/.ssh && chown -R hadoop:hadoop ${HADOOP_HOME}/.ssh
 
 CMD ["/usr/sbin/init"]
 

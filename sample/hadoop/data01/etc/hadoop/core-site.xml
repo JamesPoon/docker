@@ -41,4 +41,8 @@
         <name>hadoop.tmp.dir</name>
         <value>/usr/local/hadoop/temp</value>
     </property>
+    <property>  
+        <name>hadoop.http.staticuser.user</name>  
+        <value>hdfs</value>  
+    </property>  
 </configuration>

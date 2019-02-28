@@ -36,9 +36,17 @@
         <name>fs.permissions.umask-mode</name>
         <value>002</value>  
     </property>
+-->
     <property>
         <name>dfs.permissions.superusergroup</name>
         <value>hdfs</value>  
     </property>
--->
+    <property>
+        <name>dfs.permissions.enabled</name>
+        <value>false</value>
+    </property>
+    <property>
+            <name>dfs.replication</name>
+            <value>2</value>
+    </property>
 </configuration>
