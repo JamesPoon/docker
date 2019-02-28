@@ -1,0 +1,106 @@
+version: '3'
+networks:
+  hadoop:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.8.0/24
+services: 
+  name01: 
+    image: panshx/hadoop
+    container_name: hadoop00
+    hostname: name.hadoop
+#    user: hdfs
+    command: /usr/sbin/init
+#    entrypoint: 
+    environment: 
+      HADOOP_USER_NAME: hdfs
+    extra_hosts: 
+       name.hadoop: 172.16.8.100
+       data01.hadoop: 172.16.8.101
+       data02.hadoop: 172.16.8.102
+#    network_mode: bridge
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.8.100
+    ports: 
+      - "52200:22"
+      - "9870:9870"
+      - "8088:8088"
+    volumes: 
+      - /run
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./namenode/etc:/usr/local/hadoop/etc
+      - ./namenode/data:/usr/local/hadoop/data
+      - ./namenode/name:/usr/local/hadoop/name
+      - ./namenode/logs:/usr/local/hadoop/logs
+      - ./namenode/temp:/usr/local/hadoop/temp
+      - ./namenode/sbin/start-dfs.sh:/usr/local/hadoop/sbin/start-dfs.sh
+      - ./namenode/sbin/stop-dfs.sh:/usr/local/hadoop/sbin/stop-dfs.sh
+      - ./namenode/sbin/start-yarn.sh:/usr/local/hadoop/sbin/start-yarn.sh
+      - ./namenode/sbin/stop-yarn.sh:/usr/local/hadoop/sbin/stop-yarn.sh
+  data01:
+    image: panshx/hadoop
+    container_name: hadoop01
+    hostname: data01.hadoop
+#    user: hdfs
+    command: /usr/sbin/init
+#    entrypoint:
+    environment:
+      HADOOP_USER_NAME: hdfs
+    extra_hosts:
+       name.hadoop: 172.16.8.100
+       data01.hadoop: 172.16.8.101
+       data02.hadoop: 172.16.8.102
+#    network_mode: bridge
+    networks:
+      hadoop:
+        ipv4_address: 172.16.8.101
+    ports:
+      - "52201:22"
+    volumes:
+      - /run
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./data01/etc:/usr/local/hadoop/etc
+      - ./data01/name:/usr/local/hadoop/name
+      - ./data01/data:/usr/local/hadoop/data
+      - ./data01/logs:/usr/local/hadoop/logs
+      - ./data01/temp:/usr/local/hadoop/temp
+      - ./data01/sbin/start-dfs.sh:/usr/local/hadoop/sbin/start-dfs.sh
+      - ./data01/sbin/stop-dfs.sh:/usr/local/hadoop/sbin/stop-dfs.sh
+      - ./data01/sbin/start-yarn.sh:/usr/local/hadoop/sbin/start-yarn.sh
+      - ./data01/sbin/stop-yarn.sh:/usr/local/hadoop/sbin/stop-yarn.sh
+  data02:
+    image: panshx/hadoop
+    container_name: hadoop02
+    hostname: data02.hadoop
+#    user: hdfs
+    command: /usr/sbin/init
+#    entrypoint:
+    environment:
+      HADOOP_USER_NAME: hdfs
+    extra_hosts:
+       name.hadoop: 172.16.8.100
+       data01.hadoop: 172.16.8.101
+       data02.hadoop: 172.16.8.102
+#    network_mode: bridge
+    networks:
+      hadoop:
+        ipv4_address: 172.16.8.102
+    ports:
+      - "52202:22"
+    volumes:
+      - /run
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./data02/etc:/usr/local/hadoop/etc
+      - ./data02/name:/usr/local/hadoop/name
+      - ./data02/data:/usr/local/hadoop/data
+      - ./data02/logs:/usr/local/hadoop/logs
+      - ./data02/temp:/usr/local/hadoop/temp
+      - ./data02/sbin/start-dfs.sh:/usr/local/hadoop/sbin/start-dfs.sh
+      - ./data02/sbin/stop-dfs.sh:/usr/local/hadoop/sbin/stop-dfs.sh
+      - ./data02/sbin/start-yarn.sh:/usr/local/hadoop/sbin/start-yarn.sh
+      - ./data02/sbin/stop-yarn.sh:/usr/local/hadoop/sbin/stop-yarn.sh
+
+    
