@@ -1,0 +1,107 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  nginx: 
+    image: panshx/nginx-alpine
+    container_name: nginx
+    hostname: nginx
+    sysctls: 
+      - net.core.somaxconn=8192
+    command: 
+      - /bin/sh
+      - -c 
+      - |
+          nginx -c /usr/local/nginx/conf/nginx.conf
+          tail -f /dev/null
+    environment: 
+      NGINX_HOME: /usr/local/nginx
+    networks: 
+      - bridge
+    ports: 
+      - "80:80"
+    volumes: 
+#      - ./conf:/usr/local/nginx/conf
+#      - ./conf/conf.d:/usr/local/nginx/conf/conf.d
+      - ./proxy/conf/conf.d/default.conf:/usr/local/nginx/conf/conf.d/default.conf
+      - ./proxy/conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./proxy/data:/usr/local/nginx/data
+      - ./proxy/logs:/usr/local/nginx/logs
+  nginx-001: 
+    image: panshx/nginx-alpine
+    container_name: nginx-001
+    hostname: nginx-001
+    sysctls: 
+      - net.core.somaxconn=8192
+    command: 
+      - /bin/sh
+      - -c 
+      - |
+          nginx -c /usr/local/nginx/conf/nginx.conf
+          tail -f /dev/null
+    environment: 
+      NGINX_HOME: /usr/local/nginx
+    networks: 
+      - bridge
+#    ports: 
+#      - "80:80"
+    volumes: 
+#      - ./conf:/usr/local/nginx/conf
+#      - ./conf/conf.d:/usr/local/nginx/conf/conf.d
+      - ./conf/conf.d/default.conf:/usr/local/nginx/conf/conf.d/default.conf
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./001/data:/usr/local/nginx/data
+      - ./001/logs:/usr/local/nginx/logs
+  nginx-002: 
+    image: panshx/nginx-alpine
+    container_name: nginx-002
+    hostname: nginx-002
+    sysctls: 
+      - net.core.somaxconn=8192
+    command: 
+      - /bin/sh
+      - -c 
+      - |
+          nginx -c /usr/local/nginx/conf/nginx.conf
+          tail -f /dev/null
+    environment: 
+      NGINX_HOME: /usr/local/nginx
+    networks: 
+      - bridge
+#    ports: 
+#      - "80:80"
+    volumes: 
+#      - ./conf:/usr/local/nginx/conf
+#      - ./conf/conf.d:/usr/local/nginx/conf/conf.d
+      - ./conf/conf.d/default.conf:/usr/local/nginx/conf/conf.d/default.conf
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./002/data:/usr/local/nginx/data
+      - ./002/logs:/usr/local/nginx/logs
+  nginx-003: 
+    image: panshx/nginx-alpine
+    container_name: nginx-003
+    hostname: nginx-003
+    sysctls: 
+      - net.core.somaxconn=8192
+    command: 
+      - /bin/sh
+      - -c 
+      - |
+          nginx -c /usr/local/nginx/conf/nginx.conf
+          tail -f /dev/null
+    environment: 
+      NGINX_HOME: /usr/local/nginx
+    networks: 
+      - bridge
+#    ports: 
+#      - "80:80"
+    volumes: 
+#      - ./conf:/usr/local/nginx/conf
+#      - ./conf/conf.d:/usr/local/nginx/conf/conf.d
+      - ./conf/conf.d/default.conf:/usr/local/nginx/conf/conf.d/default.conf
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./003/data:/usr/local/nginx/data
+      - ./003/logs:/usr/local/nginx/logs
+

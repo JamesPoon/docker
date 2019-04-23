@@ -1,0 +1,163 @@
+version: '3'
+networks:
+  hadoop: 
+    external: 
+      name: hadoop
+services: 
+  zkui: 
+    image: panshx/zkui 
+    container_name: zkui 
+    hostname: zkui 
+    extra_hosts: 
+      zkui: 172.16.18.100 
+      zk01: 172.16.18.101 
+      zk02: 172.16.18.102 
+      zk03: 172.16.18.103 
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.100 
+    ports: 
+      - "9090:9090" 
+    volumes: 
+      - ./zkui/config.cfg:/usr/local/zkui/config.cfg 
+  zk01: 
+    image: panshx/zookeeper
+    container_name: zk01 
+    hostname: zk01
+    extra_hosts: 
+      zkui: 172.16.18.100 
+      zk01: 172.16.18.101 
+      zk02: 172.16.18.102 
+      zk03: 172.16.18.103 
+      data231: 172.16.18.231
+      data232: 172.16.18.232
+      data233: 172.16.18.233
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.101 
+    ports: 
+      - "2181:2181" 
+    volumes: 
+      - ./zk01/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk01/data:/usr/local/zookeeper/data 
+      - ./zk01/logs:/usr/local/zookeeper/logs 
+  zk02: 
+    image: panshx/zookeeper 
+    container_name: zk02 
+    hostname: zk02 
+    extra_hosts: 
+      zkui: 172.16.18.100 
+      zk01: 172.16.18.101 
+      zk02: 172.16.18.102 
+      zk03: 172.16.18.103 
+      data231: 172.16.18.231
+      data232: 172.16.18.232
+      data233: 172.16.18.233
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.102 
+    ports: 
+      - "2281:2181" 
+    volumes: 
+      - ./zk02/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk02/data:/usr/local/zookeeper/data 
+      - ./zk02/logs:/usr/local/zookeeper/logs 
+  zk03: 
+    image: panshx/zookeeper 
+    container_name: zk03 
+    hostname: zk03 
+    extra_hosts: 
+      zkui: 172.16.18.100 
+      zk01: 172.16.18.101 
+      zk02: 172.16.18.102 
+      zk03: 172.16.18.103 
+      data231: 172.16.18.231
+      data232: 172.16.18.232
+      data233: 172.16.18.233
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.103 
+    ports: 
+      - "2381:2181" 
+    volumes: 
+      - ./zk03/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk03/data:/usr/local/zookeeper/data 
+      - ./zk03/logs:/usr/local/zookeeper/logs 
+  data231: 
+    image: panshx/hadoop
+    container_name: data231
+    hostname: data231
+#    environment: 
+#      HADOOP_USER_NAME: hdfs
+    extra_hosts: 
+      zk01: 172.16.18.101 
+      zk02: 172.16.18.102 
+      zk03: 172.16.18.103 
+      data231: 172.16.18.231
+      data232: 172.16.18.232
+      data233: 172.16.18.233
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.231
+    ports: 
+      - "9871:9870"
+      - "8188:8088"
+      - "8120:8020"
+    volumes: 
+      - ./01/etc:/usr/local/hadoop/etc
+      - ./01/data:/usr/local/hadoop/data
+      - ./01/name:/usr/local/hadoop/name
+      - ./01/logs:/usr/local/hadoop/logs
+      - ./01/temp:/usr/local/hadoop/temp
+      - ./01/journal:/usr/local/hadoop/journal
+  data232: 
+    image: panshx/hadoop
+    container_name: data232
+    hostname: data232
+    extra_hosts: 
+      zk01: 172.16.18.101 
+      zk02: 172.16.18.102 
+      zk03: 172.16.18.103 
+      data231: 172.16.18.231
+      data232: 172.16.18.232
+      data233: 172.16.18.233
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.232
+    ports: 
+      - "9872:9870"
+      - "8288:8088"
+      - "8220:8020"
+    volumes: 
+      - ./02/etc:/usr/local/hadoop/etc
+      - ./02/data:/usr/local/hadoop/data
+      - ./02/name:/usr/local/hadoop/name
+      - ./02/logs:/usr/local/hadoop/logs
+      - ./02/temp:/usr/local/hadoop/temp
+      - ./02/journal:/usr/local/hadoop/journal
+  data233: 
+    image: panshx/hadoop
+    container_name: data233
+    hostname: data233
+    extra_hosts: 
+      zk01: 172.16.18.101 
+      zk02: 172.16.18.102 
+      zk03: 172.16.18.103 
+      data231: 172.16.18.231
+      data232: 172.16.18.232
+      data233: 172.16.18.233
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.233
+    ports: 
+      - "9873:9870"
+      - "8388:8088"
+      - "8320:8020"
+    volumes: 
+      - ./03/etc:/usr/local/hadoop/etc
+      - ./03/data:/usr/local/hadoop/data
+      - ./03/name:/usr/local/hadoop/name
+      - ./03/logs:/usr/local/hadoop/logs
+      - ./03/temp:/usr/local/hadoop/temp
+      - ./03/journal:/usr/local/hadoop/journal
+    

@@ -1,0 +1,29 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: multihost
+services: 
+  proxy011: 
+    image: haproxy:1.9-alpine
+    container_name: proxy011
+    hostname: proxy011
+#    tty: true
+    environment: 
+      NGINX_HOME: /usr/local/haproxy
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.11
+    ports: 
+      - "1080:1080"
+      - "80:80"
+    volumes: 
+      - ./011/conf/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      - ./011/conf/conf.d:/etc/nginx/conf.d
+      - ./011/data:/usr/local/nginx
+      - ./011/logs:/var/log/nginx
+      

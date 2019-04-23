@@ -1,0 +1,133 @@
+version: '3'
+#networks:
+#  bridge: 
+#    external: 
+#      name: hadoop
+#  cloud: 
+#    driver: bridge 
+#    ipam: 
+#      driver: default 
+#      config: 
+#        - subnet: 172.16.88.0/24 
+services: 
+  redis-server-91: 
+    image: redis:5-alpine 
+    container_name: redis-server-91
+    hostname: redis-server-91
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 6391
+    network_mode: host
+    ports: 
+      - "6391" 
+#    networks: 
+#      cloud: 
+#        ipv4_address: 172.16.88.91 
+#      - bridge
+#    ports: 
+#      - "6379:6379" 
+    volumes: 
+      - ./91/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./91/data:/usr/local/redis/data
+      - ./91/logs:/usr/local/redis/logs 
+  redis-server-92: 
+    image: redis:5-alpine 
+    container_name: redis-server-92
+    hostname: redis-server-92
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 6392 --slaveof 192.168.88.166 6391
+    network_mode: host
+    ports: 
+      - "6392" 
+#    networks: 
+#      cloud: 
+#        ipv4_address: 172.16.88.92
+#      - bridge
+#    ports: 
+#      - "6379:6379" 
+    volumes: 
+      - ./92/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./92/data:/usr/local/redis/data
+      - ./92/logs:/usr/local/redis/logs 
+  redis-server-93: 
+    image: redis:5-alpine 
+    container_name: redis-server-93
+    hostname: redis-server-93
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 6393 --slaveof 192.168.88.166 6391
+    network_mode: host
+    ports: 
+      - "6393" 
+#    networks: 
+#      cloud: 
+#        ipv4_address: 172.16.88.93 
+#      - bridge
+#    ports: 
+#      - "6379:6379" 
+    volumes: 
+      - ./93/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./93/data:/usr/local/redis/data
+      - ./93/logs:/usr/local/redis/logs 
+  redis-sentinel-61: 
+    image: redis:5-alpine 
+    container_name: redis-sentinel-61
+    hostname: redis-sentinel-61
+    working_dir: /usr/local/redis
+    command: redis-sentinel /usr/local/redis/conf/sentinel.conf --port 6361
+    network_mode: host
+    ports: 
+      - "6361:6361" 
+    depends_on: 
+      - redis-server-91
+#    networks: 
+#      cloud: 
+#        ipv4_address: 172.16.88.61 
+#      - bridge
+#    ports: 
+#      - "16379:16379" 
+    volumes: 
+      - ./61/conf/sentinel.conf:/usr/local/redis/conf/sentinel.conf
+      - ./61/data:/usr/local/redis/data
+      - ./61/logs:/usr/local/redis/logs 
+  redis-sentinel-62: 
+    image: redis:5-alpine 
+    container_name: redis-sentinel-62
+    hostname: redis-sentinel-62
+    working_dir: /usr/local/redis
+    command: redis-sentinel /usr/local/redis/conf/sentinel.conf --port 6362
+    network_mode: host
+    ports: 
+      - "6362:6362" 
+    depends_on: 
+      - redis-server-91
+#    networks: 
+#      cloud: 
+#        ipv4_address: 172.16.88.62
+#      - bridge
+#    ports: 
+#      - "16379:16379" 
+    volumes: 
+      - ./62/conf/sentinel.conf:/usr/local/redis/conf/sentinel.conf
+      - ./62/data:/usr/local/redis/data
+      - ./62/logs:/usr/local/redis/logs 
+  redis-sentinel-63: 
+    image: redis:5-alpine 
+    container_name: redis-sentinel-63
+    hostname: redis-sentinel-63
+    working_dir: /usr/local/redis
+    command: redis-sentinel /usr/local/redis/conf/sentinel.conf --port 6363
+    network_mode: host
+    ports: 
+      - "6363:6363" 
+    depends_on: 
+      - redis-server-91
+#    networks: 
+#      cloud: 
+#        ipv4_address: 172.16.88.63
+#      - bridge
+#    ports: 
+#      - "16379:16379" 
+    volumes: 
+      - ./63/conf/sentinel.conf:/usr/local/redis/conf/sentinel.conf
+      - ./63/data:/usr/local/redis/data
+      - ./63/logs:/usr/local/redis/logs 
+    

@@ -1,0 +1,116 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: multihost
+services: 
+  pxc-node-041: 
+    image: panshx/pxc-mysql
+    container_name: pxc-node-041
+    hostname: pxc-node-041
+#    command: chown -R mysql:mysql data logs && mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null
+#    command: mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null && tail -f /dev/null
+#    command: tail -f /dev/null
+    command: mysqld --wsrep_cluster_address=gcomm://
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.41
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./041/conf/my.cnf:/etc/my.cnf
+      - ./041/conf/mysql:/etc/my.cnf.d
+      - ./041/conf/percona:/etc/percona-xtradb-cluster.conf.d
+      - ./041/data:/usr/local/mysql/data
+      - ./041/logs:/usr/local/mysql/logs
+#      - ./entrypoint.sh:/usr/local/mysql/entrypoint.sh
+  pxc-node-042: 
+    image: panshx/pxc-mysql
+    container_name: pxc-node-042
+    hostname: pxc-node-042
+#    command: chown -R mysql:mysql data logs && mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null
+#    command: mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null && tail -f /dev/null
+#    command: tail -f /dev/null
+    command: mysqld --wsrep_cluster_address=gcomm://172.17.2.41
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.42
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./042/conf/my.cnf:/etc/my.cnf
+      - ./042/conf/mysql:/etc/my.cnf.d
+      - ./042/conf/percona:/etc/percona-xtradb-cluster.conf.d
+      - ./042/data:/usr/local/mysql/data
+      - ./042/logs:/usr/local/mysql/logs
+  pxc-node-043: 
+    image: panshx/pxc-mysql
+    container_name: pxc-node-043
+    hostname: pxc-node-043
+#    command: chown -R mysql:mysql data logs && mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null
+#    command: mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null && tail -f /dev/null
+#    command: tail -f /dev/null
+    command: mysqld --wsrep_cluster_address=gcomm://172.17.2.41
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.43
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./043/conf/my.cnf:/etc/my.cnf
+      - ./043/conf/mysql:/etc/my.cnf.d
+      - ./043/conf/percona:/etc/percona-xtradb-cluster.conf.d
+      - ./043/data:/usr/local/mysql/data
+      - ./043/logs:/usr/local/mysql/logs
+  pxc-node-044: 
+    image: panshx/pxc-mysql
+    container_name: pxc-node-044
+    hostname: pxc-node-044
+#    command: chown -R mysql:mysql data logs && mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null
+#    command: mysqld_safe --wsrep_cluster_address=gcomm:// > /dev/null && tail -f /dev/null
+#    command: tail -f /dev/null
+    command: mysqld --wsrep_cluster_address=gcomm://172.17.2.41
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.44
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./044/conf/my.cnf:/etc/my.cnf
+      - ./044/conf/mysql:/etc/my.cnf.d
+      - ./044/conf/percona:/etc/percona-xtradb-cluster.conf.d
+      - ./044/data:/usr/local/mysql/data
+      - ./044/logs:/usr/local/mysql/logs
+      

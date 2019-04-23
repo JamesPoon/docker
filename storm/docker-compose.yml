@@ -1,0 +1,78 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: hadoop
+services: 
+  zookeeper: 
+    image: zookeeper:3.4
+    container_name: zookeeper
+    hostname: zookeeper
+#    command: ./entrypoint.sh
+#    depends_on:
+#      - node
+#     links:
+#       - node
+#    tty: true
+    environment: 
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888
+#    extra_hosts: 
+#      proxy011: 172.16.18.11
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.17.2.30
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+#      - ./zk/conf:/conf
+      - ./zk/data:/data
+      - ./zk/journal:/datalog
+      - ./zk/logs:/logs
+      
+  nimbus:
+    image: storm:1.2
+    container_name: nimbus
+    hostname: nimbus
+    command: storm nimbus
+    networks: 
+      - bridge
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper
+    ports:
+      - 6627:6627
+
+  storm-ui:
+    image: storm:1.2
+    container_name: storm-ui
+    hostname: storm-ui
+    command: storm ui
+    networks: 
+      - bridge
+    depends_on:
+      - nimbus
+      - zookeeper
+    links:
+      - nimbus
+      - zookeeper
+    ports:
+      - 8080:8080
+    
+  storm-supervisor:
+    image: storm:1.2
+    container_name: storm-supervisor
+    hostname: storm-supervisor
+    command: storm supervisor
+    networks: 
+      - bridge
+    depends_on:
+      - nimbus
+      - zookeeper
+    links:
+      - nimbus
+      - zookeeper
+    

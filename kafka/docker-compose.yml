@@ -1,0 +1,74 @@
+version: '3' 
+networks: 
+  bridge: 
+    external: 
+      name: cloud
+#  kafka: 
+#    driver: bridge 
+#    ipam: 
+#      driver: default 
+#      config: 
+#        - subnet: 172.16.28.0/24 
+services: 
+  kfk01: 
+    image: panshx/kafka 
+    container_name: kfk01 
+    hostname: kfk01 
+    command: "bin/kafka-server-start.sh config/server.properties"
+    extra_hosts: 
+      zk01: 172.18.88.101 
+      zk01: 172.18.88.102
+      zk01: 172.18.88.103
+      kfk01: 172.18.88.111 
+      kfk02: 172.18.88.112 
+      kfk03: 172.18.88.113 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.111 
+    ports: 
+      - "9192:9092" 
+    volumes: 
+      - ./01/config/server.properties:/usr/local/kafka/config/server.properties 
+      - ./01/logs:/usr/local/kafka/logs
+  kfk02: 
+    image: panshx/kafka 
+    container_name: kfk02 
+    hostname: kfk02 
+    command: "bin/kafka-server-start.sh config/server.properties"
+    extra_hosts: 
+      zk01: 172.18.88.101 
+      zk01: 172.18.88.102
+      zk01: 172.18.88.103
+      kfk01: 172.18.88.111 
+      kfk02: 172.18.88.112 
+      kfk03: 172.18.88.113 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.112 
+    ports: 
+      - "9292:9092" 
+    volumes: 
+      - ./02/config/server.properties:/usr/local/kafka/config/server.properties
+      - ./02/logs:/usr/local/kafka/logs 
+  kfk03: 
+    image: panshx/kafka 
+    container_name: kfk03 
+    hostname: kfk03 
+    command: "bin/kafka-server-start.sh config/server.properties"
+    extra_hosts: 
+      zk01: 172.18.88.101 
+      zk01: 172.18.88.102
+      zk01: 172.18.88.103
+      kfk01: 172.18.88.111 
+      kfk02: 172.18.88.112 
+      kfk03: 172.18.88.113 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.113 
+    ports: 
+      - "9392:9092" 
+    volumes: 
+      - ./03/config/server.properties:/usr/local/kafka/config/server.properties 
+      - ./03/logs:/usr/local/kafka/logs
+
+    

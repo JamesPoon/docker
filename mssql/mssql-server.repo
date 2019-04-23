@@ -1,0 +1,6 @@
+[packages-microsoft-com-mssql-server-2017]
+name=packages-microsoft-com-mssql-server-2017
+baseurl=https://packages.microsoft.com/rhel/7/mssql-server-2017/
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc

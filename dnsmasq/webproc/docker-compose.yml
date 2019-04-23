@@ -1,0 +1,34 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  webproc: 
+    image: panshx/webproc
+    container_name: webproc 
+    hostname: webproc 
+#    restart: always
+    cap_add: 
+      - NET_ADMIN
+#    entrypoint: webproc /usr/local/webproc/conf/webproc.toml
+    command: webproc conf/webproc.toml
+    tty: true
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.2
+    ports: 
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:5380"
+    volumes: 
+      - ../conf/dnsmasq.conf:/etc/dnsmasq.conf
+      - ../conf/dnsmasq.resolve.conf:/etc/dnsmasq.resolve.conf
+      - ../conf/dnsmasq.addon.host:/etc/dnsmasq.addon.host
+      - ../conf/dnsmasq.d:/etc/dnsmasq.d
+      - ./conf/webproc.toml:/usr/local/webproc/conf/webproc.toml
+      - ./data:/usr/local/webproc/data
+      - ./logs:/usr/local/webproc/logs 
+
+    

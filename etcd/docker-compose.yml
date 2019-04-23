@@ -1,0 +1,66 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  etcd: 
+    image: panshx/etcd
+    container_name: etcd 
+    hostname: etcd 
+#    restart: always
+    cap_add: 
+      - NET_ADMIN
+#    command: etcd -data-dir=data -listen-peer-urls=http://0.0.0.0:2380 -listen-client-urls=http://0.0.0.0:2379
+    command: 
+      - etcd
+      - --name=default
+      - --data-dir=data
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --advertise-client-urls=http://0.0.0.0:2379
+      - --listen-peer-urls=http://0.0.0.0:2380
+      - --initial-advertise-peer-urls=http://0.0.0.0:2380
+      - --initial-cluster="default=http://0.0.0.0:2380"
+      - --initial-cluster-token=etcd-cluster-token
+      - --initial-cluster-state=new
+#  --name s1 
+#  --data-dir data 
+#  --listen-client-urls http://0.0.0.0:2379 
+#  --advertise-client-urls http://0.0.0.0:2379 
+#  --listen-peer-urls http://0.0.0.0:2380 
+#  --initial-advertise-peer-urls http://0.0.0.0:2380 
+#  --initial-cluster s1=http://0.0.0.0:2380 
+#  --initial-cluster-token tkn 
+#  --initial-cluster-state new
+    tty: true
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.2
+    ports: 
+      - "2379:2379"
+      - "2380:2380"
+    volumes: 
+      - ./conf:/usr/local/etcd/conf
+      - ./data:/usr/local/etcd/data
+      - ./logs:/usr/local/etcd/logs 
+  etcd-ui: 
+    image: deltaprojects/etcdkeeper
+    container_name: etcd-ui
+    hostname: etcd-ui
+#    restart: always
+    tty: true
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.2
+#    external_links: 
+    links: 
+      - etcd
+    ports: 
+      - "8080:8080"
+#    volumes: 
+#      - ./conf:/usr/local/etcd/conf
+#      - ./data:/usr/local/etcd/data
+#      - ./logs:/usr/local/etcd/logs
+    

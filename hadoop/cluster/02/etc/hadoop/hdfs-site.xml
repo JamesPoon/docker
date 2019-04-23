@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/usr/local/hadoop/name</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/usr/local/hadoop/data</value>
+    </property>
+    <!--
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+    </property>
+    -->
+    <property>
+        <name>dfs.permissions.superusergroup</name>
+        <value>hdfs</value>  
+    </property>
+    <!--
+    <property>
+        <name>dfs.permissions.enabled</name>
+        <value>false</value>
+    </property>
+    -->
+    <property>
+            <name>dfs.replication</name>
+            <value>2</value>
+    </property>
+    <property>
+        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>dfs.nameservices</name>  
+        <value>cluster</value>  
+    </property>
+<property>
+    <name>dfs.ha.namenodes.cluster</name>
+    <value>nn231,nn232,nn233</value>
+</property>
+<!-- nn1的RPC通信地址，nn1所在地址  -->  
+<property>
+    <name>dfs.namenode.rpc-address.cluster.nn231</name>
+    <value>data231:8020</value>
+</property>
+<!-- nn1的http通信地址，外部访问地址 -->  
+<property>
+    <name>dfs.namenode.http-address.cluster.nn231</name>
+    <value>data231:9870</value>
+</property>
+<!-- nn2的RPC通信地址，nn2所在地址 -->  
+<property>
+    <name>dfs.namenode.rpc-address.cluster.nn232</name>
+    <value>data232:8020</value>
+</property>
+<!-- nn2的http通信地址，外部访问地址 -->  
+<property>
+    <name>dfs.namenode.http-address.cluster.nn232</name>
+    <value>data232:9870</value>
+</property>
+<!-- nn3的RPC通信地址，nn2所在地址 -->  
+<property>
+    <name>dfs.namenode.rpc-address.cluster.nn233</name>
+    <value>data233:8020</value>
+</property>
+<!-- nn3的http通信地址，外部访问地址 -->  
+<property>
+    <name>dfs.namenode.http-address.cluster.nn233</name>
+    <value>data233:9870</value>
+</property>
+<!-- 指定NameNode的元数据在JournalNode日志上的存放位置(一般和zookeeper部署在一起) -->  
+<property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://data231:8485;data232:8485;data233:8485/hadoop</value>
+</property>
+<!-- 指定JournalNode在本地磁盘存放数据的位置 -->  
+<property>
+    <name>dfs.journalnode.edits.dir</name>
+    <value>/usr/local/hadoop/journal</value>
+</property>
+<!--客户端通过代理访问namenode，访问文件系统，HDFS 客户端与Active 节点通信的Java 类，使用其确定Active 节点是否活跃  -->  
+<property>
+    <name>dfs.client.failover.proxy.provider.cluster</name>
+    <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+</property>
+<!--这是配置自动切换的方法，有多种使用方法，具体可以看官网，在文末会给地址，这里是远程登录杀死的方法,这个参数的值可以有多种，你也可以换成shell(/bin/true)试试，也是可以的，这个脚本do nothing 返回0 -->  
+<property>  
+    <name>dfs.ha.fencing.methods</name>  
+    <value>sshfence</value> 
+</property>
+<!-- 这个是使用sshfence隔离机制时才需要配置ssh免登陆 --> 
+<property>  
+    <name>dfs.ha.fencing.ssh.private-key-files</name>  
+    <value>~/.ssh/id_rsa</value>  
+</property>
+<!-- 这个是开启自动故障转移，如果你没有自动故障转移，这个可以先不配,可以先注释掉 -->  
+<property>
+    <name>dfs.ha.automatic-failover.enabled</name>
+    <value>true</value>
+</property>
+</configuration>

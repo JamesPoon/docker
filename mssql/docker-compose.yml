@@ -1,0 +1,36 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  mssql-server: 
+    image: panshx/mssql
+    container_name: mssql-server 
+    hostname: mssql-server 
+#    command: "agent -server -ui -datacenter=docker -node=consul002 -client=172.16.18.2 -bootstrap-expect=3"
+#    tty: true
+    environment: 
+      ACCEPT_EULA: Y
+      SQLSERVR_SA_PASSWORD: iSc123465!
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.16.18.2
+    ports: 
+#      - "8300:8300"
+#      - "8301:8301"
+#      - "8302:8302"
+#      - "8301:8301/udp"
+#      - "8302:8302/udp"
+      - "1433:1433"
+#      - "8600:8600"
+#      - "8553:53"
+    volumes: 
+#      - ./conf:/consul/config
+      - ./data:/var/opt/mssql/data
+      - ./logs:/var/opt/mssql/log
+#    depends_on: 
+#      - consul002
+    
+    

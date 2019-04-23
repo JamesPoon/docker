@@ -1,0 +1,105 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  etcd: 
+    image: haproxy:1.9-alpine
+    container_name: etcd
+    hostname: etcd
+#    tty: true
+    environment: 
+      HAPROXY_HOME: /usr/local/haproxy
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.11
+    ports: 
+      - "80:80"
+      - "2379:2379"
+    volumes: 
+      - ./proxy/conf/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+  etcd-001: 
+    image: panshx/etcd
+    container_name: etcd-001
+    hostname: etcd-001
+#    restart: always
+    cap_add: 
+      - NET_ADMIN
+    command: 
+      - etcd
+      - --config-file=conf/etcd.yml
+    tty: true
+    networks: 
+      - bridge
+#    ports: 
+#      - "2379:2379"
+#      - "2380:2380"
+    volumes: 
+      - ./001/conf:/usr/local/etcd/conf
+      - ./001/data:/usr/local/etcd/data
+      - ./001/logs:/usr/local/etcd/logs 
+  etcd-002: 
+    image: panshx/etcd
+    container_name: etcd-002
+    hostname: etcd-002
+#    restart: always
+    cap_add: 
+      - NET_ADMIN
+    command: 
+      - etcd
+      - --config-file=conf/etcd.yml
+    tty: true
+    networks: 
+      - bridge
+    depends_on: 
+      - etcd-001
+#    ports: 
+#      - "2379:2379"
+#      - "2380:2380"
+    volumes: 
+      - ./002/conf:/usr/local/etcd/conf
+      - ./002/data:/usr/local/etcd/data
+      - ./002/logs:/usr/local/etcd/logs 
+  etcd-003: 
+    image: panshx/etcd
+    container_name: etcd-003
+    hostname: etcd-003
+#    restart: always
+    cap_add: 
+      - NET_ADMIN
+    command: 
+      - etcd
+      - --config-file=conf/etcd.yml
+    tty: true
+    networks: 
+      - bridge
+    depends_on: 
+      - etcd-002
+#    ports: 
+#      - "2379:2379"
+#      - "2380:2380"
+    volumes: 
+      - ./003/conf:/usr/local/etcd/conf
+      - ./003/data:/usr/local/etcd/data
+      - ./003/logs:/usr/local/etcd/logs 
+  etcd-ui: 
+    image: deltaprojects/etcdkeeper
+    container_name: etcd-ui
+    hostname: etcd-ui
+#    restart: always
+    tty: true
+    networks: 
+      - bridge
+    links: 
+      - etcd-001
+      - etcd-002
+      - etcd-003
+    ports: 
+      - "8080:8080"
+#    volumes: 
+#      - ./conf:/usr/local/etcd/conf
+#      - ./data:/usr/local/etcd/data
+#      - ./logs:/usr/local/etcd/logs
+    

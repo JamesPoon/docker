@@ -1,0 +1,31 @@
+FROM panshx/glibc
+
+ENV 	JAVA_HOME=/usr/local/jvm \
+        SCALA_HOME=/usr/local/scala \
+        SPARK_HOME=/usr/local/spark \
+	PATH=${PATH}:/usr/local/jvm/jre/bin:/usr/local/jvm/bin:/usr/local/scala/bin:/usr/local/spark/bin
+
+ADD 	jdk1.8.0_201 ${JAVA_HOME}
+ADD	scala-2.11.12  ${SCALA_HOME}
+ADD	spark-2.4.0-bin-hadoop2.7 ${SPARK_HOME}
+
+RUN 	apk update && apk upgrade && apk add bash \
+        && java -version
+	
+RUN mkdir -p /root/.ssh && chmod 700 /root/.ssh \
+        && apk update && apk upgrade && apk add openssh \
+        && ssh-keygen -A \
+        && sed -i "s/#PubkeyAuthentication yes/PubkeyAuthentication yes/" /etc/ssh/sshd_config \
+        && sed -i "s/#StrictModes yes/StrictModes no/" /etc/ssh/sshd_config \
+        && echo "sshd enable PubkeyAuthentication "
+
+ADD .ssh /root/.ssh
+ADD entrypoint.sh /
+
+EXPOSE 22
+
+ENTRYPOINT  ["/entrypoint.sh"]
+
+WORKDIR /usr/local/spark
+
+

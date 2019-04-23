@@ -1,0 +1,35 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  nginx: 
+    image: panshx/nginx-alpine
+    container_name: nginx
+    hostname: nginx
+    sysctls: 
+      - net.core.somaxconn=8192
+    command: 
+      - /bin/sh
+      - -c 
+      - |
+          nginx -c /usr/local/nginx/conf/nginx.conf
+          tail -f /dev/null
+    environment: 
+      NGINX_HOME: /usr/local/nginx
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.18.88.29
+#        ipv4_address: 172.16.18.29
+    ports: 
+      - "80:80"
+    volumes: 
+#      - ./conf:/usr/local/nginx/conf
+#      - ./conf/conf.d:/usr/local/nginx/conf/conf.d
+      - ./conf/conf.d/default.conf:/usr/local/nginx/conf/conf.d/default.conf
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./data:/usr/local/nginx/data
+      - ./logs:/usr/local/nginx/logs
+      

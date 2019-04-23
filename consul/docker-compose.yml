@@ -1,0 +1,114 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: hadoop
+services: 
+  consul002: 
+    image: consul
+    container_name: consul002 
+    hostname: consul002 
+#    restart: always
+    command: "agent -server -ui -datacenter=docker -node=consul002 -client=172.16.18.2 -bootstrap-expect=3"
+    tty: true
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.16.18.2
+    ports: 
+#      - "8300:8300"
+#      - "8301:8301"
+#      - "8302:8302"
+#      - "8301:8301/udp"
+#      - "8302:8302/udp"
+      - "8502:8500"
+#      - "8600:8600"
+#      - "8553:53"
+    volumes: 
+#      - ./conf:/consul/config
+      - ./002/data:/consul/data
+#      - ./logs:/usr/local/consul/logs 
+#    depends_on: 
+#      - consul002
+  consul003: 
+    image: consul
+    container_name: consul003 
+    hostname: consul003 
+#    restart: always
+    command: "agent -server -ui -datacenter=docker -node=consul003 -client=172.16.18.3 -retry-join=172.16.18.2"
+    tty: true
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.16.18.3
+    ports: 
+#      - "8300:8300"
+#      - "8301:8301"
+#      - "8302:8302"
+#      - "8301:8301/udp"
+#      - "8302:8302/udp"
+      - "8503:8500"
+#      - "8600:8600"
+#      - "8553:53"
+    volumes: 
+#      - ./conf:/consul/config
+      - ./003/data:/consul/data
+#      - ./logs:/usr/local/consul/logs 
+    depends_on: 
+      - consul002
+  consul004: 
+    image: consul
+    container_name: consul004
+    hostname: consul004 
+#    restart: always
+    command: "agent -server -ui -datacenter=docker -node=consul004 -client=172.16.18.4 -retry-join=172.16.18.2"
+    tty: true
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.16.18.4
+    ports: 
+#      - "8300:8300"
+#      - "8301:8301"
+#      - "8302:8302"
+#      - "8301:8301/udp"
+#      - "8302:8302/udp"
+      - "8504:8500"
+#      - "8600:8600"
+#      - "8553:53"
+    volumes: 
+#      - ./conf:/consul/config
+      - ./004/data:/consul/data
+#      - ./logs:/usr/local/consul/logs 
+    depends_on: 
+      - consul002
+  consul009: 
+    image: consul
+    container_name: consul009 
+    hostname: consul009 
+#    restart: always
+    command: "agent -ui -datacenter=docker -node=consul009 -client=172.16.18.9 -retry-join=172.16.18.2"
+    tty: true
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.16.18.9
+    ports: 
+#      - "8300:8300"
+#      - "8301:8301"
+#      - "8302:8302"
+#      - "8301:8301/udp"
+#      - "8302:8302/udp"
+      - "8500:8500"
+#      - "8600:8600"
+#      - "8553:53"
+    volumes: 
+#      - ./conf:/consul/config
+      - ./009/data:/consul/data
+#      - ./logs:/usr/local/consul/logs 
+    depends_on: 
+      - consul002
+      - consul003
+      - consul004
+    
+    

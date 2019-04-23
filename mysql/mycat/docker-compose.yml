@@ -1,0 +1,34 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: hadoop
+services: 
+  mycat: 
+    image: panshx/mycat
+    container_name: mycat
+    hostname: mycat
+#    command: ./entrypoint.sh
+#    depends_on:
+#      - node
+#     links:
+#       - node
+#    tty: true
+    environment: 
+      MYCAT_HOME: /usr/local/mycat
+#    extra_hosts: 
+#      proxy011: 172.16.18.11
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.17.2.30
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+#      - ./conf:/usr/local/mycat/conf
+      - ./conf/wrapper.conf:/usr/local/mycat/conf/wrapper.conf
+      - ./conf/server.xml:/usr/local/mycat/conf/server.xml
+      - ./conf/schema.xml:/usr/local/mycat/conf/schema.xml
+      - ./conf/rule.xml:/usr/local/mycat/conf/rule.xml
+      - ./logs:/usr/local/mycat/logs

@@ -1,0 +1,26 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  mysql57: 
+    image: mysql:5.7
+#    image: mysql/mysql-server:5.7
+    container_name: mysql57
+    hostname: mysql57 
+    restart: always
+    user: "1000"
+    networks: 
+      - bridge
+#      hadoop: 
+#        ipv4_address: 172.16.18.11
+    ports: 
+      - "3306:3306" 
+    volumes: 
+      - ./conf/my.cnf:/etc/mysql/my.cnf
+#      - ./conf:/etc/mysql
+      - ./data:/var/lib/mysql
+      - ./logs:/var/log/mysql
+      - ./logs:/var/run/mysqld
+    

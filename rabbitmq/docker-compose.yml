@@ -1,0 +1,105 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: hadoop
+services: 
+  rmq171: 
+    image: rabbitmq:3-management-alpine
+    container_name: rmq171
+    hostname: rmq171
+    environment: 
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: UoNOcDhfxW9uoZ92wh6BjA==
+    extra_hosts: 
+      rmq171: 172.16.18.171
+      rmq172: 172.16.18.172
+      rmq173: 172.16.18.173
+      rmq174: 172.16.18.174
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.171
+    ports: 
+      - "5672:5672"
+      - "15672:15672"
+#      - "25672:25672"
+    volumes: 
+#      - ./01/conf/rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+#      - ./01/conf/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./01/conf:/usr/share/elasticsearch/config
+      - ./01/data:/var/lib/rabbitmq
+      - ./01/logs:/usr/share/elasticsearch/logs
+  rmq172: 
+    image: rabbitmq:3-management-alpine
+    container_name: rmq172
+    hostname: rmq172
+    environment: 
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: UoNOcDhfxW9uoZ92wh6BjA==
+    extra_hosts: 
+      rmq171: 172.16.18.171
+      rmq172: 172.16.18.172
+      rmq173: 172.16.18.173
+      rmq174: 172.16.18.174
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.172
+#    ports: 
+#      - "5672:5672"
+#      - "15672:15672"
+#      - "25672:25672"
+    volumes: 
+      - ./02/data:/var/lib/rabbitmq
+  rmq173: 
+    image: rabbitmq:3-management-alpine
+    container_name: rmq173
+    hostname: rmq173
+    environment: 
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: UoNOcDhfxW9uoZ92wh6BjA==
+    extra_hosts: 
+      rmq171: 172.16.18.171
+      rmq172: 172.16.18.172
+      rmq173: 172.16.18.173
+      rmq174: 172.16.18.174
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.173
+#    ports: 
+#      - "5672:5672"
+#      - "15672:15672"
+#      - "25672:25672"
+    volumes: 
+      - ./03/data:/var/lib/rabbitmq
+  rmq174: 
+    image: rabbitmq:3-management-alpine
+    container_name: rmq174
+    hostname: rmq174
+    environment: 
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: UoNOcDhfxW9uoZ92wh6BjA==
+    extra_hosts: 
+      rmq171: 172.16.18.171
+      rmq172: 172.16.18.172
+      rmq173: 172.16.18.173
+      rmq174: 172.16.18.174
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.174
+#    ports: 
+#      - "5672:5672"
+#      - "15672:15672"
+#      - "25672:25672"
+    volumes: 
+      - ./04/data:/var/lib/rabbitmq
+
+
+

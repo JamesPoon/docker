@@ -1,0 +1,92 @@
+version: '3' 
+networks: 
+  bridge: 
+    external: 
+      name: cloud
+#  spark: 
+#    driver: bridge 
+#    ipam: 
+#      driver: default 
+#      config: 
+#        - subnet: 172.18.88.0/24 
+services: 
+  spark00: 
+    image: panshx/spark 
+    container_name: spark00 
+    hostname: spark00 
+#    command: sbin/start-all.sh 
+    environment: 
+      SPARK_DAEMON_JAVA_OPTS: "-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zk01:2181,zk02:2181,zk03:2181 -Dspark.deploy.zookeeper.dir=/spark"
+    extra_hosts: 
+      zkui: 172.18.88.100 
+      zk01: 172.18.88.101 
+      zk02: 172.18.88.102 
+      zk03: 172.18.88.103 
+      spark00: 172.18.88.200 
+      spark01: 172.18.88.201 
+      spark02: 172.18.88.202 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.200 
+    ports: 
+      - "7077:7077" 
+      - "8080:8080" 
+      - "8081:8081"
+    volumes: 
+#      - ./00/conf/spark-env.sh:/usr/local/spark/conf/spark-env.sh 
+      - ./00/conf/slaves:/usr/local/spark/conf/slaves 
+      - ./00/logs:/usr/local/spark/logs
+  spark01: 
+    image: panshx/spark 
+    container_name: spark01 
+    hostname: spark01 
+#    command: sbin/start-master.sh 
+    environment: 
+      SPARK_DAEMON_JAVA_OPTS: "-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zk01:2181,zk02:2181,zk03:2181 -Dspark.deploy.zookeeper.dir=/spark"
+    extra_hosts: 
+      zkui: 172.18.88.100 
+      zk01: 172.18.88.101 
+      zk02: 172.18.88.102 
+      zk03: 172.18.88.103 
+      spark00: 172.18.88.200 
+      spark01: 172.18.88.201 
+      spark02: 172.18.88.202 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.201 
+    ports: 
+      - "7177:7077" 
+      - "8180:8080" 
+      - "8181:8081"
+    volumes: 
+#      - ./01/conf/spark-env.sh:/usr/local/spark/conf/spark-env.sh 
+      - ./01/conf/slaves:/usr/local/spark/conf/slaves 
+      - ./01/logs:/usr/local/spark/logs
+  spark02: 
+    image: panshx/spark 
+    container_name: spark02 
+    hostname: spark02 
+#    command: sbin/start-master.sh 
+    environment: 
+      SPARK_DAEMON_JAVA_OPTS: "-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zk01:2181,zk02:2181,zk03:2181 -Dspark.deploy.zookeeper.dir=/spark"
+    extra_hosts: 
+      zkui: 172.18.88.100 
+      zk01: 172.18.88.101 
+      zk02: 172.18.88.102 
+      zk03: 172.18.88.103 
+      spark00: 172.18.88.200 
+      spark01: 172.18.88.201 
+      spark02: 172.18.88.202 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.202 
+    ports: 
+      - "7277:7077" 
+      - "8280:8080" 
+      - "8281:8081"
+    volumes: 
+#      - ./02/conf/spark-env.sh:/usr/local/spark/conf/spark-env.sh 
+      - ./02/conf/slaves:/usr/local/spark/conf/slaves 
+      - ./02/logs:/usr/local/spark/logs
+
+    

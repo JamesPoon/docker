@@ -1,0 +1,79 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: multihost
+services: 
+  repl-node-031: 
+    image: mysql:5.7
+    container_name: repl-node-031
+    hostname: repl-node-031
+#    user: "1000"
+#    privileged: true
+#    tty: true
+    environment: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.11
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./031/conf/my.cnf:/etc/mysql/my.cnf
+      - ./031/data:/var/lib/mysql:rw
+      - ./031/logs:/var/log/mysql:rw
+      - ./031/logs:/var/run/mysqld:rw
+  repl-node-032: 
+    image: mysql:5.7
+    container_name: repl-node-032
+    hostname: repl-node-032
+#    user: "1000"
+#    privileged: true
+#    tty: true
+    environment: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.11
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./032/conf/my.cnf:/etc/mysql/my.cnf
+      - ./032/data:/var/lib/mysql
+      - ./032/logs:/var/log/mysql
+      - ./032/logs:/var/run/mysqld
+  repl-node-033: 
+    image: mysql:5.7
+    container_name: repl-node-033
+    hostname: repl-node-033
+#    user: "1000"
+#    privileged: true
+#    tty: true
+    environment: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.11
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./033/conf/my.cnf:/etc/mysql/my.cnf
+      - ./033/data:/var/lib/mysql
+      - ./033/logs:/var/log/mysql
+      - ./033/logs:/var/run/mysqld
+      

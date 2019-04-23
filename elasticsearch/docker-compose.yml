@@ -1,0 +1,100 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: hadoop
+services: 
+  es190: 
+    image: elasticsearch:5.6-alpine
+    container_name: es190
+    hostname: es190
+#    environment: 
+#      HADOOP_USER_NAME: hdfs
+    extra_hosts: 
+      es190: 172.16.18.190 
+      es191: 172.16.18.191 
+      es192: 172.16.18.192 
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.190
+    ports: 
+      - "9200:9200"
+      - "9300:9300"
+    volumes: 
+      - ./01/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./01/data:/usr/share/elasticsearch/data
+      - ./01/logs:/usr/share/elasticsearch/logs
+  es191: 
+    image: elasticsearch:5.6-alpine
+    container_name: es191
+    hostname: es191
+    extra_hosts: 
+      es190: 172.16.18.190 
+      es191: 172.16.18.191 
+      es192: 172.16.18.192 
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.191
+    ports: 
+      - "9201:9200"
+      - "9301:9300"
+    volumes: 
+      - ./02/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./02/data:/usr/share/elasticsearch/data
+      - ./02/logs:/usr/share/elasticsearch/logs
+  es192: 
+    image: elasticsearch:5.6-alpine
+    container_name: es192
+    hostname: es192
+    extra_hosts: 
+      es190: 172.16.18.190 
+      es191: 172.16.18.191 
+      es192: 172.16.18.192 
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.192
+    ports: 
+      - "9202:9200"
+      - "9302:9300"
+    volumes: 
+      - ./03/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./03/data:/usr/share/elasticsearch/data
+      - ./03/logs:/usr/share/elasticsearch/logs
+  eshead: 
+    image: mobz/elasticsearch-head:5-alpine
+    container_name: eshead
+    hostname: eshead
+    extra_hosts: 
+      es190: 172.16.18.190 
+      es191: 172.16.18.191 
+      es192: 172.16.18.192 
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.181
+    ports: 
+      - "9100:9100"
+    volumes: 
+      - ./head/conf:/usr/share/elasticsearch/config
+#      - ./head/data:/usr/share/elasticsearch/data
+#      - ./head/logs:/usr/share/elasticsearch/logs
+  kibana180: 
+    image: kibana:5.6
+    container_name: kibana180
+    hostname: kibana180
+    environment: 
+      ELASTICSEARCH_HOSTS: http://es190
+    extra_hosts: 
+      es190: 172.16.18.190 
+      es191: 172.16.18.191 
+      es192: 172.16.18.192 
+      elasticsearch: 172.16.18.190 
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.180
+    ports: 
+      - "5601:5601"
+    volumes: 
+#      - ./kibana/conf/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./kibana/data:/usr/share/kibana/data
+      - ./kibana/logs:/usr/share/kibana/logs
+    

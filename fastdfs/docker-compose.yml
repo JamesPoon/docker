@@ -1,0 +1,92 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  fastdfs: 
+    image: panshx/fastdfs
+    container_name: fastdfs 
+    hostname: fastdfs 
+#    command: sh -c "/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf" && tail -f /dev/null
+    command: 
+      - /bin/sh
+      - -c
+      - |
+          /usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf start
+          tail -f /dev/null
+    tty: true
+    networks: 
+      - bridge
+    ports: 
+      - "22122:22122" 
+    volumes: 
+      - ./conf:/etc/fdfs
+      - ./conf/tracker.conf:/etc/fdfs/tracker.conf
+      - ./data:/usr/local/fastdfs
+      - ./data/tracker:/usr/local/fastdfs/tracker 
+      - ./data/storage:/usr/local/fastdfs/storage 
+      - ./data/client:/usr/local/fastdfs/client 
+      - ./data/storage/store:/usr/local/fastdfs/storage/store 
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+  fastdfs-storage: 
+    image: panshx/fastdfs
+    container_name: fastdfs-storage
+    hostname: fastdfs-storage
+#    command: sh -c "/usr/bin/fdfs_storaged /etc/fdfs/storage.conf" && tail -f /dev/null
+    command: 
+      - /bin/sh
+      - -c
+      - |
+          /usr/bin/fdfs_storaged /etc/fdfs/storage.conf start
+          tail -f /dev/null
+    tty: true
+    depends_on: 
+      - fastdfs
+    links: 
+      - fastdfs
+    networks: 
+      - bridge
+    ports: 
+      - "23000:23000" 
+    volumes: 
+      - ./conf:/etc/fdfs
+      - ./conf/storage.conf:/etc/fdfs/storage.conf
+      - ./data:/usr/local/fastdfs
+      - ./data/tracker:/usr/local/fastdfs/tracker 
+      - ./data/storage:/usr/local/fastdfs/storage 
+      - ./data/client:/usr/local/fastdfs/client 
+      - ./data/storage/store:/usr/local/fastdfs/storage/store 
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+  fastdfs-nginx: 
+    image: panshx/fastdfs
+    container_name: fastdfs-nginx
+    hostname: fastdfs-nginx
+#    command: sh -c "/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf" && tail -f /dev/null
+    command: 
+      - /bin/sh
+      - -c
+      - |
+          /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+          tail -f /dev/null
+    tty: true
+    depends_on: 
+      - fastdfs
+    links: 
+      - fastdfs
+    networks: 
+      - bridge
+    ports: 
+      - "22080:8888" 
+    volumes: 
+      - ./conf:/etc/fdfs
+      - ./data:/usr/local/fastdfs
+      - ./data/tracker:/usr/local/fastdfs/tracker 
+      - ./data/storage:/usr/local/fastdfs/storage 
+      - ./data/client:/usr/local/fastdfs/client 
+      - ./data/storage/store:/usr/local/fastdfs/storage/store 
+      - ./logs:/usr/local/nginx/logs 
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+    
+    
+    

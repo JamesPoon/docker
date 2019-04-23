@@ -1,0 +1,70 @@
+version: '3'
+
+services: 
+  redis-cluster-70: 
+    image: redis:5-alpine 
+    container_name: redis-cluster-70 
+    hostname: redis-cluster-70 
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 7070
+    network_mode: host
+    volumes: 
+      - ./70/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./70/data:/usr/local/redis/data
+      - ./70/logs:/usr/local/redis/logs 
+  redis-cluster-71: 
+    image: redis:5-alpine 
+    container_name: redis-cluster-71
+    hostname: redis-cluster-71 
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 7071
+    network_mode: host
+    volumes: 
+      - ./71/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./71/data:/usr/local/redis/data
+      - ./71/logs:/usr/local/redis/logs 
+  redis-cluster-72: 
+    image: redis:5-alpine 
+    container_name: redis-cluster-72 
+    hostname: redis-cluster-72 
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 7072
+    network_mode: host
+    volumes: 
+      - ./72/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./72/data:/usr/local/redis/data
+      - ./72/logs:/usr/local/redis/logs 
+  redis-cluster-80: 
+    image: redis:5-alpine 
+    container_name: redis-cluster-80 
+    hostname: redis-cluster-80 
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 7080
+    network_mode: host
+    volumes: 
+      - ./80/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./80/data:/usr/local/redis/data
+      - ./80/logs:/usr/local/redis/logs 
+  redis-cluster-81: 
+    image: redis:5-alpine 
+    container_name: redis-cluster-81
+    hostname: redis-cluster-81 
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 7081
+    network_mode: host
+    volumes: 
+      - ./81/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./81/data:/usr/local/redis/data
+      - ./81/logs:/usr/local/redis/logs 
+  redis-cluster-82: 
+    image: redis:5-alpine 
+    container_name: redis-cluster-82 
+    hostname: redis-cluster-82 
+    working_dir: /usr/local/redis
+    command: redis-server /usr/local/redis/conf/redis.conf --port 7082
+    network_mode: host
+    volumes: 
+      - ./82/conf/redis.conf:/usr/local/redis/conf/redis.conf
+      - ./82/data:/usr/local/redis/data
+      - ./82/logs:/usr/local/redis/logs 
+    

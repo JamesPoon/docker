@@ -1,0 +1,107 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: hadoop
+services: 
+  amq161: 
+    image: panshx/activemq
+    container_name: amq161
+    hostname: amq161
+    tty: true
+    environment: 
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: UoNOcDhfxW9uoZ92wh6BjA==
+    extra_hosts: 
+      amq161: 172.16.18.161
+      amq162: 172.16.18.162
+      amq163: 172.16.18.163
+      zk01: 172.16.18.101
+      zk02: 172.16.18.102
+      zk03: 172.16.18.103
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.161
+    ports: 
+#      - "5672:5672"
+      - "8161:8161"
+#      - "1883:1883"
+#      - "61613:61613"
+#      - "61614:61614"
+#      - "61616:61616"
+    volumes: 
+      - ./01/conf/activemq.xml:/usr/local/activemq/conf/activemq.xml
+      - ./01/conf/users.properties:/usr/local/activemq/conf/users.properties
+      - ./01/conf/groups.properties:/usr/local/activemq/conf/groups.properties
+      - ./01/data:/usr/local/activemq/data
+      - ./01/logs:/usr/local/activemq/logs
+  amq162: 
+    image: panshx/activemq
+    container_name: amq162
+    hostname: amq162
+    tty: true
+    environment: 
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: UoNOcDhfxW9uoZ92wh6BjA==
+    extra_hosts: 
+      amq161: 172.16.18.161
+      amq162: 172.16.18.162
+      amq163: 172.16.18.163
+      zk01: 172.16.18.101
+      zk02: 172.16.18.102
+      zk03: 172.16.18.103
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.162
+#    ports: 
+#      - "5672:5672"
+#      - "8161:8161"
+#      - "1883:1883"
+#      - "61613:61613"
+#      - "61614:61614"
+#      - "61616:61616"
+    volumes: 
+      - ./02/conf/activemq.xml:/usr/local/activemq/conf/activemq.xml
+      - ./02/conf/users.properties:/usr/local/activemq/conf/users.properties
+      - ./02/conf/groups.properties:/usr/local/activemq/conf/groups.properties
+      - ./02/data:/usr/local/activemq/data
+      - ./02/logs:/usr/local/activemq/logs
+  amq163: 
+    image: panshx/activemq
+    container_name: amq163
+    hostname: amq163
+    tty: true
+    environment: 
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: UoNOcDhfxW9uoZ92wh6BjA==
+    extra_hosts: 
+      amq161: 172.16.18.161
+      amq162: 172.16.18.162
+      amq163: 172.16.18.163
+      zk01: 172.16.18.101
+      zk02: 172.16.18.102
+      zk03: 172.16.18.103
+    networks: 
+      bridge: 
+        ipv4_address: 172.16.18.163
+#    ports: 
+#      - "5672:5672"
+#      - "8161:8161"
+#      - "1883:1883"
+#      - "61613:61613"
+#      - "61614:61614"
+#      - "61616:61616"
+    volumes: 
+      - ./03/conf/activemq.xml:/usr/local/activemq/conf/activemq.xml
+      - ./03/conf/users.properties:/usr/local/activemq/conf/users.properties
+      - ./03/conf/groups.properties:/usr/local/activemq/conf/groups.properties
+      - ./03/data:/usr/local/activemq/data
+      - ./03/logs:/usr/local/activemq/logs
+      
+      

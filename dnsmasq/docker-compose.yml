@@ -1,0 +1,32 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  dnsmasq: 
+    image: panshx/dnsmasq
+    container_name: dnsmasq 
+    hostname: dnsmasq 
+#    restart: always
+    cap_add: 
+      - NET_ADMIN
+#    command: dnsmasq -k
+    tty: true
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.2
+    ports: 
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes: 
+      - ./conf/dnsmasq.conf:/etc/dnsmasq.conf
+      - ./conf/dnsmasq.resolve.conf:/etc/dnsmasq.resolve.conf
+      - ./conf/dnsmasq.addon.host:/etc/dnsmasq.addon.host
+      - ./conf/dnsmasq.d:/etc/dnsmasq.d
+#      - ./conf:/usr/local/dnsmasq/conf
+      - ./data:/usr/local/dnsmasq/data
+      - ./logs:/usr/local/dnsmasq/logs 
+
+    

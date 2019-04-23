@@ -1,0 +1,147 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: multihost
+services: 
+  mha-manager: 
+    image: panshx/mha-manager
+    container_name: mha-manager
+    hostname: mha-manager
+    command: ./entrypoint.sh
+    depends_on:
+      - mha-node-031
+      - mha-node-032
+      - mha-node-033
+      - mha-node-034
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - mha-node-031
+#      - mha-node-032
+#      - mha-node-033
+#      - mha-node-034
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.30
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./030/conf:/usr/local/mha/conf
+      - ./030/data:/usr/local/mha/data
+      - ./030/logs:/usr/local/mha/logs
+      - ./030/entrypoint.sh:/usr/local/mha/entrypoint.sh
+      - ./.ssh:/root/.ssh
+  mha-node-031: 
+    image: panshx/mha-mysql
+    container_name: mha-node-031
+    hostname: mha-node-031
+    command: ./entrypoint.sh
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.31
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./031/conf/my.cnf:/etc/my.cnf
+      - ./031/conf:/usr/local/mysql/conf
+      - ./031/data:/usr/local/mysql/data
+      - ./031/logs:/usr/local/mysql/logs
+      - ./entrypoint.sh:/usr/local/mysql/entrypoint.sh
+      - ./.ssh:/root/.ssh
+  mha-node-032: 
+    image: panshx/mha-mysql
+    container_name: mha-node-032
+    hostname: mha-node-032
+    command: ./entrypoint.sh
+    depends_on:
+      - mha-node-031
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.32
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./032/conf/my.cnf:/etc/my.cnf
+      - ./032/conf:/usr/local/mysql/conf
+      - ./032/data:/usr/local/mysql/data
+      - ./032/logs:/usr/local/mysql/logs
+      - ./entrypoint.sh:/usr/local/mysql/entrypoint.sh
+      - ./.ssh:/root/.ssh
+  mha-node-033: 
+    image: panshx/mha-mysql
+    container_name: mha-node-033
+    hostname: mha-node-033
+    command: ./entrypoint.sh
+    depends_on:
+      - mha-node-031
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.33
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./033/conf/my.cnf:/etc/my.cnf
+      - ./033/conf:/usr/local/mysql/conf
+      - ./033/data:/usr/local/mysql/data
+      - ./033/logs:/usr/local/mysql/logs
+      - ./entrypoint.sh:/usr/local/mysql/entrypoint.sh
+      - ./.ssh:/root/.ssh
+  mha-node-034: 
+    image: panshx/mha-mysql
+    container_name: mha-node-034
+    hostname: mha-node-034
+    command: ./entrypoint.sh
+    depends_on:
+      - mha-node-031
+#     && tail -f /usr/local/mysql/logs/mysqld.log
+#    tty: true
+    environment: 
+      MHA_HOME: /usr/local/mha
+#    extra_hosts: 
+#      - proxy011
+#      proxy011: 172.16.18.11
+    networks: 
+#      - bridge
+      bridge: 
+        ipv4_address: 172.17.2.34
+#    ports: 
+#      - "1080:1080"
+#      - "80:80"
+    volumes: 
+      - ./034/conf/my.cnf:/etc/my.cnf
+      - ./034/conf:/usr/local/mysql/conf
+      - ./034/data:/usr/local/mysql/data
+      - ./034/logs:/usr/local/mysql/logs
+      - ./init.sh:/usr/local/mysql/init.sh
+      - ./entrypoint.sh:/usr/local/mysql/entrypoint.sh
+      - ./.ssh:/root/.ssh
+      

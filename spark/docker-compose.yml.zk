@@ -1,0 +1,168 @@
+version: '3' 
+networks: 
+  spark: 
+    driver: bridge 
+    ipam: 
+      driver: default 
+      config: 
+        - subnet: 172.16.18.0/24 
+services: 
+  zkui: 
+    image: panshx/zkui 
+    container_name: zkui 
+    hostname: zkui.hadoop 
+    extra_hosts: 
+      zkui.hadoop: 172.16.18.100 
+      zk01.hadoop: 172.16.18.101 
+      zk02.hadoop: 172.16.18.102 
+      zk03.hadoop: 172.16.18.103 
+      spark00.hadoop: 172.16.18.200 
+      spark01.hadoop: 172.16.18.201 
+      spark02.hadoop: 172.16.18.202 
+    networks: 
+      spark: 
+        ipv4_address: 172.16.18.100 
+    ports: 
+      - "9090:9090" 
+    volumes: 
+      - ./zkui/config.cfg:/usr/local/zkui/config.cfg 
+  zk01: 
+    image: panshx/zookeeper 
+    container_name: zk01 
+    hostname: zk01.hadoop 
+    extra_hosts: 
+      zkui.hadoop: 172.16.18.100 
+      zk01.hadoop: 172.16.18.101 
+      zk02.hadoop: 172.16.18.102 
+      zk03.hadoop: 172.16.18.103 
+      spark00.hadoop: 172.16.18.200 
+      spark01.hadoop: 172.16.18.201 
+      spark02.hadoop: 172.16.18.202 
+    networks: 
+      spark: 
+        ipv4_address: 172.16.18.101 
+    ports: 
+      - "2181:2181" 
+    volumes: 
+      - ./zk01/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk01/data:/usr/local/zookeeper/data 
+      - ./zk01/logs:/usr/local/zookeeper/logs 
+  zk02: 
+    image: panshx/zookeeper 
+    container_name: zk02 
+    hostname: zk02.hadoop 
+    extra_hosts: 
+      zkui.hadoop: 172.16.18.100 
+      zk01.hadoop: 172.16.18.101 
+      zk02.hadoop: 172.16.18.102 
+      zk03.hadoop: 172.16.18.103 
+      spark00.hadoop: 172.16.18.200 
+      spark01.hadoop: 172.16.18.201 
+      spark02.hadoop: 172.16.18.202 
+    networks: 
+      spark: 
+        ipv4_address: 172.16.18.102 
+    ports: 
+      - "2281:2181" 
+    volumes: 
+      - ./zk02/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk02/data:/usr/local/zookeeper/data 
+      - ./zk02/logs:/usr/local/zookeeper/logs 
+  zk03: 
+    image: panshx/zookeeper 
+    container_name: zk03 
+    hostname: zk03.hadoop 
+    extra_hosts: 
+      zkui.hadoop: 172.16.18.100 
+      zk01.hadoop: 172.16.18.101 
+      zk02.hadoop: 172.16.18.102 
+      zk03.hadoop: 172.16.18.103 
+      spark00.hadoop: 172.16.18.200 
+      spark01.hadoop: 172.16.18.201 
+      spark02.hadoop: 172.16.18.202 
+    networks: 
+      spark: 
+        ipv4_address: 172.16.18.103 
+    ports: 
+      - "2381:2181" 
+    volumes: 
+      - ./zk03/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk03/data:/usr/local/zookeeper/data 
+      - ./zk03/logs:/usr/local/zookeeper/logs 
+  spark00: 
+    image: panshx/spark 
+    container_name: spark00 
+    hostname: spark00.hadoop 
+#    command: sbin/start-all.sh 
+    environment: 
+      SPARK_DAEMON_JAVA_OPTS: "-Dspark.deploy.recoveryMode=ZOOKEEPER-Dspark.deploy.zookeeper.url=zk01.hadoop:2181,zk02.hadoop:2181,zk03.hadoop:2181-Dspark.deploy.zookeeper.dir=/spark"
+    extra_hosts: 
+      zkui.hadoop: 172.16.18.100 
+      zk01.hadoop: 172.16.18.101 
+      zk02.hadoop: 172.16.18.102 
+      zk03.hadoop: 172.16.18.103 
+      spark00.hadoop: 172.16.18.200 
+      spark01.hadoop: 172.16.18.201 
+      spark02.hadoop: 172.16.18.202 
+    networks: 
+      spark: 
+        ipv4_address: 172.16.18.200 
+    ports: 
+      - "7077:7077" 
+      - "8080:8080" 
+      - "8081:8081"
+    volumes: 
+#      - ./00/conf/spark-env.sh:/usr/local/spark/conf/spark-env.sh 
+      - ./00/conf/slaves:/usr/local/spark/conf/slaves 
+  spark01: 
+    image: panshx/spark 
+    container_name: spark01 
+    hostname: spark01.hadoop 
+#    command: sbin/start-master.sh 
+    environment: 
+      SPARK_DAEMON_JAVA_OPTS: "-Dspark.deploy.recoveryMode=ZOOKEEPER-Dspark.deploy.zookeeper.url=zk01.hadoop:2181,zk02.hadoop:2181,zk03.hadoop:2181-Dspark.deploy.zookeeper.dir=/spark"
+    extra_hosts: 
+      zkui.hadoop: 172.16.18.100 
+      zk01.hadoop: 172.16.18.101 
+      zk02.hadoop: 172.16.18.102 
+      zk03.hadoop: 172.16.18.103 
+      spark00.hadoop: 172.16.18.200 
+      spark01.hadoop: 172.16.18.201 
+      spark02.hadoop: 172.16.18.202 
+    networks: 
+      spark: 
+        ipv4_address: 172.16.18.201 
+    ports: 
+      - "7177:7077" 
+      - "8180:8080" 
+      - "8181:8081"
+    volumes: 
+#      - ./01/conf/spark-env.sh:/usr/local/spark/conf/spark-env.sh 
+      - ./01/conf/slaves:/usr/local/spark/conf/slaves 
+  spark02: 
+    image: panshx/spark 
+    container_name: spark02 
+    hostname: spark02.hadoop 
+#    command: sbin/start-master.sh 
+    environment: 
+      SPARK_DAEMON_JAVA_OPTS: "-Dspark.deploy.recoveryMode=ZOOKEEPER-Dspark.deploy.zookeeper.url=zk01.hadoop:2181,zk02.hadoop:2181,zk03.hadoop:2181-Dspark.deploy.zookeeper.dir=/spark"
+    extra_hosts: 
+      zkui.hadoop: 172.16.18.100 
+      zk01.hadoop: 172.16.18.101 
+      zk02.hadoop: 172.16.18.102 
+      zk03.hadoop: 172.16.18.103 
+      spark00.hadoop: 172.16.18.200 
+      spark01.hadoop: 172.16.18.201 
+      spark02.hadoop: 172.16.18.202 
+    networks: 
+      spark: 
+        ipv4_address: 172.16.18.202 
+    ports: 
+      - "7277:7077" 
+      - "8280:8080" 
+      - "8281:8081"
+    volumes: 
+#      - ./02/conf/spark-env.sh:/usr/local/spark/conf/spark-env.sh 
+      - ./02/conf/slaves:/usr/local/spark/conf/slaves 
+
+    

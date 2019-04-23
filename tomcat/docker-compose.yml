@@ -1,0 +1,33 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  tomcat: 
+    image: tomcat:8-alpine
+    container_name: tomcat
+    hostname: tomcat
+#    working_dir: /usr/local/tomcat
+#    command: "agent -server -ui -datacenter=docker -node=consul002 -client=172.16.18.2 -bootstrap-expect=3"
+    tty: true
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.16.18.30
+    ports: 
+      - "8080:8080"
+      - "8443:8443"
+    volumes: 
+      - ./webapps:/usr/local/tomcat/webapps
+#      - ./conf:/usr/local/tomcat/conf
+      - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./conf/server.xml:/usr/local/tomcat/conf/server.xml
+      - ./conf/context.xml:/usr/local/tomcat/conf/context.xml
+      - ./data:/usr/local/tomcat/data
+      - ./temp:/usr/local/tomcat/temp
+      - ./logs:/usr/local/tomcat/logs 
+#    depends_on: 
+#      - consul002
+    
+    

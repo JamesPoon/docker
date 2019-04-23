@@ -1,0 +1,88 @@
+version: '3' 
+networks: 
+  bridge: 
+    external: 
+      name: cloud
+#  zookeeper: 
+#    driver: bridge 
+#    ipam: 
+#      driver: default 
+#      config: 
+#        - subnet: 172.18.88.0/24 
+services: 
+  zkui: 
+    image: panshx/jre 
+    container_name: zkui 
+    hostname: zkui 
+    working_dir: /usr/local/zkui
+    command: "java -jar zkui-2.0-SNAPSHOT.jar"
+    extra_hosts: 
+      zkui: 172.18.88.100 
+      zk01: 172.18.88.101 
+      zk02: 172.18.88.102 
+      zk03: 172.18.88.103 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.100 
+    ports: 
+      - "9090:9090" 
+    volumes: 
+      - ./zkui:/usr/local/zkui
+#      - ./zkui/config.cfg:/usr/local/zkui/config.cfg 
+#      - ./zkui/zkui-2.0-SNAPSHOT.jar:/usr/local/zkui/zkui.jar 
+  zk01: 
+    image: panshx/zookeeper 
+    container_name: zk01 
+    hostname: zk01 
+    extra_hosts: 
+      zkui: 172.18.88.100 
+      zk01: 172.18.88.101 
+      zk02: 172.18.88.102 
+      zk03: 172.18.88.103 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.101 
+    ports: 
+      - "2181:2181" 
+    volumes: 
+      - ./zk01/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk01/data:/usr/local/zookeeper/data 
+      - ./zk01/logs:/usr/local/zookeeper/logs 
+  zk02: 
+    image: panshx/zookeeper 
+    container_name: zk02 
+    hostname: zk02 
+    extra_hosts: 
+      zkui: 172.18.88.100 
+      zk01: 172.18.88.101 
+      zk02: 172.18.88.102 
+      zk03: 172.18.88.103 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.102 
+    ports: 
+      - "2281:2181" 
+    volumes: 
+      - ./zk02/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk02/data:/usr/local/zookeeper/data 
+      - ./zk02/logs:/usr/local/zookeeper/logs 
+  zk03: 
+    image: panshx/zookeeper 
+    container_name: zk03 
+    hostname: zk03 
+    extra_hosts: 
+      zkui: 172.18.88.100 
+      zk01: 172.18.88.101 
+      zk02: 172.18.88.102 
+      zk03: 172.18.88.103 
+    networks: 
+      bridge: 
+        ipv4_address: 172.18.88.103 
+    ports: 
+      - "2381:2181" 
+    volumes: 
+      - ./zk03/conf/zoo.cfg:/usr/local/zookeeper/conf/zoo.cfg 
+      - ./zk03/data:/usr/local/zookeeper/data 
+      - ./zk03/logs:/usr/local/zookeeper/logs 
+
+    

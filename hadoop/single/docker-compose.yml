@@ -1,0 +1,82 @@
+version: '3'
+networks:
+  hadoop: 
+    external: 
+      name: hadoop
+#  hadoop:
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: 172.16.18.0/24
+services: 
+  data01: 
+    image: panshx/hadoop
+    container_name: data01
+    hostname: data01
+    environment: 
+      HADOOP_USER_NAME: hdfs
+    extra_hosts: 
+      data01: 172.16.18.221
+      data02: 172.16.18.222
+      data03: 172.16.18.223
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.221
+    ports: 
+      - "9871:9870"
+      - "8188:8088"
+      - "8120:8020"
+    volumes: 
+      - ./01/etc:/usr/local/hadoop/etc
+      - ./01/data:/usr/local/hadoop/data
+      - ./01/name:/usr/local/hadoop/name
+      - ./01/logs:/usr/local/hadoop/logs
+      - ./01/temp:/usr/local/hadoop/temp
+  data02: 
+    image: panshx/hadoop
+    container_name: data02
+    hostname: data02
+    environment: 
+      HADOOP_USER_NAME: hdfs
+    extra_hosts: 
+      data01: 172.16.18.221
+      data02: 172.16.18.222
+      data03: 172.16.18.223
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.222
+    ports: 
+      - "9872:9870"
+      - "8288:8088"
+      - "8220:8020"
+    volumes: 
+      - ./02/etc:/usr/local/hadoop/etc
+      - ./02/data:/usr/local/hadoop/data
+      - ./02/name:/usr/local/hadoop/name
+      - ./02/logs:/usr/local/hadoop/logs
+      - ./02/temp:/usr/local/hadoop/temp
+  data03: 
+    image: panshx/hadoop
+    container_name: data03
+    hostname: data03
+    environment: 
+      HADOOP_USER_NAME: hdfs
+    extra_hosts: 
+      data01: 172.16.18.221
+      data02: 172.16.18.222
+      data03: 172.16.18.223
+    networks: 
+      hadoop: 
+        ipv4_address: 172.16.18.223
+    ports: 
+      - "9873:9870"
+      - "8388:8088"
+      - "8320:8020"
+    volumes: 
+      - ./03/etc:/usr/local/hadoop/etc
+      - ./03/data:/usr/local/hadoop/data
+      - ./03/name:/usr/local/hadoop/name
+      - ./03/logs:/usr/local/hadoop/logs
+      - ./03/temp:/usr/local/hadoop/temp
+    

@@ -1,0 +1,11 @@
+name: etcd-003
+data-dir: data
+#listen-client-urls: http://172.18.88.253:2379,http://127.0.0.1:2379
+#listen-peer-urls: http://172.18.88.253:2380,http://127.0.0.1:2380
+listen-client-urls: http://0.0.0.0:2379
+advertise-client-urls: http://etcd-003:2379
+listen-peer-urls: http://0.0.0.0:2380
+initial-advertise-peer-urls: http://etcd-003:2380
+initial-cluster: etcd-001=http://etcd-001:2380,etcd-002=http://etcd-002:2380,etcd-003=http://etcd-003:2380
+initial-cluster-token: etcd-cluster-token
+initial-cluster-state: new
