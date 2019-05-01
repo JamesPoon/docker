@@ -1,0 +1,30 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  php-fpm: 
+    image: panshx/php-fpm:7.3-fpm-alpine
+    container_name: php-fpm
+    hostname: php-fpm
+    command: 
+      - /bin/sh
+      - -c 
+      - |
+          php-fpm -F
+#          nginx -c /etc/nginx/nginx.conf
+#          php-fpm -D -y /etc/php5/php-fpm.conf
+#          tail -f /dev/null
+#    tty: true
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.18.88.29
+#        ipv4_address: 172.16.18.29
+#    ports: 
+#      - "80:80"
+    volumes: 
+      - ./data:/data/htdocs/laravel
+      - ./logs:/usr/local/php/var/log
+      

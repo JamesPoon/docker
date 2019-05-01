@@ -1,0 +1,34 @@
+version: '3'
+networks:
+  bridge: 
+    external: 
+      name: cloud
+services: 
+  swoole: 
+    image: panshx/swoole
+    container_name: swoole
+    hostname: swoole
+    command: 
+      - /bin/sh
+      - -c 
+      - |
+          php-fpm 
+          tail -f /dev/null
+#          nginx -c /etc/nginx/nginx.conf
+#          php-fpm -D -y /etc/php5/php-fpm.conf
+#          tail -f /dev/null
+#    tty: true
+#    environment: 
+#      NGINX_HOME: /usr/local/nginx
+    networks: 
+      - bridge
+#      bridge: 
+#        ipv4_address: 172.18.88.29
+#        ipv4_address: 172.16.18.29
+#    ports: 
+#      - "80:80"
+    volumes: 
+      - ./conf/php-fpm.d/www.conf:/usr/local/php/etc/php-fpm.d/www.conf
+      - ./data:/data/htdocs
+      - ./logs:/usr/local/php/var/log
+      
