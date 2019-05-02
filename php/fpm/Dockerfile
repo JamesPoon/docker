@@ -59,7 +59,7 @@ RUN 	date \
 		php7-intl \
 	&& ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm \
 	&& curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
-	&& curl -sSL http://pear.php.net/go-pear.phar | php -- --install-dir=${PHP_HOME}/bin --filename=pear \
+#	&& curl -sSL https://pear.php.net/go-pear.phar | php -- --install-dir=${PHP_HOME}/bin --filename=pear \
 	&& apk del curl \
 	&& rm -rf /var/cache/apk/* \
 	&& rm -rf /tmp/* \
