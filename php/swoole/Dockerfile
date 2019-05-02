@@ -60,6 +60,10 @@ RUN 	date \
 	&& ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm \
 	&& curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
 	&& curl -sSL http://pear.php.net/go-pear.phar | php -- --install-dir=${PHP_HOME}/bin --filename=pear \
+	&& apk add --virtual .build-deps gcc g++ make autoconf binutils libtool pcre linux-headers openssl-dev php7-dev\
+	&& pecl install swoole \
+	&& echo "extension=swoole.so" > /etc/php7/conf.d/swoole.ini \
+	&& apk del .build-deps \
 	&& apk del curl \
 	&& rm -rf /var/cache/apk/* \
 	&& rm -rf /tmp/* \
